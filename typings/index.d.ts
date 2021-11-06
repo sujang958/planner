@@ -1,11 +1,13 @@
 type RootStackParam = {
   Login: undefined
   SignUp: undefined
+  EmailVerification: { email: string }
   Planner: undefined
 }
 
 type PlannerTabParam = {
   Home: undefined
+  Todo: undefined
 }
 
 type AuthReducerState = {

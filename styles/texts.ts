@@ -22,3 +22,10 @@ export const AuthTexts = StyleSheet.create({
     fontFamily: "NotoSans-Bold",
   },
 })
+
+export const EmailVerificationTexts = StyleSheet.create({
+  title: {
+    fontSize: 24,
+    fontFamily: "NotoSans-Bold",
+  },
+})

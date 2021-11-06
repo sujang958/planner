@@ -1,6 +1,6 @@
 import React, { useContext } from "react"
 import { Text, View } from "react-native"
-import AuthContext from "../states/authContexts"
+import AuthContext from "../../contexts/authContexts"
 
 const HomeScreen = () => {
   const authContext = useContext(AuthContext)

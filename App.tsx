@@ -1,44 +1,17 @@
 import { NavigationContainer } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
-import { StatusBar } from "expo-status-bar"
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useReducer,
-  useState,
-} from "react"
-import { ActivityIndicator, StyleSheet, Text, View } from "react-native"
+import React, { useCallback, useEffect, useReducer } from "react"
+import { ActivityIndicator } from "react-native"
 import "react-native-gesture-handler"
 import * as SecureStore from "expo-secure-store"
 import LoginScreen from "./screens/auth/login"
 import { useFonts } from "expo-font"
 import SignUpScreen from "./screens/auth/signup"
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
-import { Ionicons } from "@expo/vector-icons"
-import AuthContext from "./states/authContexts"
-import HomeScreen from "./screens/home"
+import AuthContext from "./contexts/authContexts"
+import Planner from "./screens/planner"
+import EmailVerificationScreen from "./screens/auth/emailVerification"
 
 const Stack = createStackNavigator<RootStackParam>()
-const Tab = createBottomTabNavigator<PlannerTabParam>()
-
-const tabBarIconHash = {
-  Home: (focused: boolean) => (focused ? "home" : "home-outline"),
-}
-
-const Planner = () => {
-  return (
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon({ focused, color, size }) {
-          return <Ionicons name={tabBarIconHash[route.name](focused)} />
-        },
-      })}
-    >
-      <Tab.Screen name="Home" component={HomeScreen} />
-    </Tab.Navigator>
-  )
-}
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -91,17 +64,18 @@ export default function App() {
 
         dispatch({ type: "SIGN_IN", token: "dummy-auth-token" })
       },
-      signOut: () => dispatch({ type: "SIGN_OUT" }),
+      signOut: () => {
+        // destory like-session
+        SecureStore.deleteItemAsync("logined").then(() =>
+          dispatch({ type: "SIGN_OUT" })
+        )
+      },
     }),
     []
   )
   const getLoginState = useCallback(async () => {
     const loginState = await SecureStore.getItemAsync("logined")
-    if (loginState) {
-      // Check the token expired
-      // if token expired
-      dispatch({ type: "RESTORE_TOKEN", token: String(loginState) })
-    }
+    if (loginState) doActions.signIn({ token: loginState })
   }, [])
 
   useEffect(() => {
@@ -120,6 +94,10 @@ export default function App() {
             <>
               <Stack.Screen name="Login" component={LoginScreen} />
               <Stack.Screen name="SignUp" component={SignUpScreen} />
+              <Stack.Screen
+                name="EmailVerification"
+                component={EmailVerificationScreen}
+              />
             </>
           )}
         </Stack.Navigator>

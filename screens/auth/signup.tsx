@@ -1,5 +1,5 @@
 import { StackScreenProps } from "@react-navigation/stack"
-import React, { useState } from "react"
+import React, { useCallback, useRef, useState } from "react"
 import { View, Text, TextInput, Pressable } from "react-native"
 import { AuthContainers } from "../../styles/containers"
 import { AuthTexts } from "../../styles/texts"
@@ -7,8 +7,30 @@ import { AuthTexts } from "../../styles/texts"
 const SignUpScreen = ({
   navigation,
 }: StackScreenProps<RootStackParam, "SignUp">) => {
+  const [email, setEmail] = useState<string>("")
   const [id, setId] = useState<string>("")
   const [pw, setPw] = useState<string>("")
+  const refs = {
+    email: useRef<TextInput>(null),
+    id: useRef<TextInput>(null),
+    pw: useRef<TextInput>(null),
+  }
+
+  const handleSignUp = useCallback(() => {
+    if (email.length === 0) {
+      refs.email.current?.focus()
+      return alert("Please put your email")
+    } else if (id.length === 0) {
+      refs.id.current?.focus()
+      return alert("Please put your id")
+    } else if (pw.length === 0) {
+      refs.pw.current?.focus()
+      return alert("Please put your password")
+    }
+    // Validate account
+    // if account is validated
+    navigation.navigate("EmailVerification", { email })
+  }, [id, pw, email])
 
   return (
     <View style={AuthContainers.container}>
@@ -26,9 +48,10 @@ const SignUpScreen = ({
           <Text style={AuthTexts.InputLabel}>E-mail</Text>
           <TextInput
             style={AuthContainers.Input}
-            value={id}
-            onChangeText={setId}
+            value={email}
+            onChangeText={setEmail}
             keyboardType="email-address"
+            ref={refs.email}
           />
         </View>
         <View style={AuthContainers.InputContainer}>
@@ -37,6 +60,7 @@ const SignUpScreen = ({
             style={AuthContainers.Input}
             value={id}
             onChangeText={setId}
+            ref={refs.id}
           />
         </View>
         <View style={AuthContainers.InputContainer}>
@@ -47,9 +71,10 @@ const SignUpScreen = ({
             secureTextEntry={true}
             value={pw}
             onChangeText={setPw}
+            ref={refs.pw}
           />
         </View>
-        <Pressable style={AuthContainers.SubmitButton}>
+        <Pressable onPress={handleSignUp} style={AuthContainers.SubmitButton}>
           <Text style={AuthTexts.ButtonText}>Sign Up</Text>
         </Pressable>
       </View>

@@ -36,3 +36,24 @@ export const AuthContainers = StyleSheet.create({
     marginHorizontal: 10,
   },
 })
+
+export const EmailVerificationContainers = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  header: {
+    marginTop: 124,
+    flex: 1,
+  },
+  body: {
+    flex: 2,
+    marginTop: 28,
+  },
+  codeInput: {
+    borderColor: "#000",
+    borderWidth: 2,
+    borderRadius: 10,
+  },
+})

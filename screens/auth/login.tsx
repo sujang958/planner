@@ -18,7 +18,7 @@ import { AuthContainers } from "../../styles/containers"
 import { AuthTexts } from "../../styles/texts"
 import * as SecureStore from "expo-secure-store"
 import { StackActions } from "@react-navigation/routers"
-import AuthContext from "../../states/authContexts"
+import AuthContext from "../../contexts/authContexts"
 import { TouchableOpacity } from "react-native-gesture-handler"
 
 const LoginScreen = ({
